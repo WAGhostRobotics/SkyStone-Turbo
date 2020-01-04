@@ -58,13 +58,18 @@ public class TeleOpParent extends LinearOpMode {
                 buttonPressed = false; // TODO: does this actually work?
             }
 
-            // Linear actuator control (g2.dl/dr)
+            // Extender control (g2.dl/dr)
             if (gamepad2.dpad_right) {
-                Kevin.horizontal.setPower(1);
+                Kevin.extender.extend();
             } else if (gamepad2.dpad_left) {
-                Kevin.horizontal.setPower(-1);
-            } else {
-                Kevin.horizontal.setPower(0);
+                Kevin.extender.retract();
+            }
+
+            // Claw grabbing (g2.x/a)
+            if (gamepad2.x) {
+                Kevin.extender.closeClaw();
+            } else if (gamepad2.a) {
+                Kevin.extender.openClaw();
             }
 
             // Intake (g2.b/y)
@@ -74,22 +79,6 @@ public class TeleOpParent extends LinearOpMode {
                 Kevin.intakeMotors.setPower(-1);
             } else {
                 Kevin.intakeMotors.setPower(0);
-            }
-
-            // Claw rotation (g2.lt/rt)
-            if (gamepad2.left_trigger > TRIGGER_MINIMUM) {
-                Kevin.clawRotate.setPower(-gamepad2.left_trigger);
-            } else if (gamepad2.right_trigger > TRIGGER_MINIMUM) {
-                Kevin.clawRotate.setPower(-gamepad2.right_trigger);
-            } else {
-                Kevin.clawRotate.setPower(0);
-            }
-
-            // Claw grabbing (g2.x/a)
-            if (gamepad2.x) {
-                Kevin.clawGrab.setPosition(0.1); // GRAB
-            } else if (gamepad2.a) {
-                Kevin.clawGrab.setPosition(0.7); // RELEASE
             }
 
             // Foundation (g1.lb/rb)

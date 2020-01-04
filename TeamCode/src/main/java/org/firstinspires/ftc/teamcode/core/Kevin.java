@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.component.Extender;
 import org.firstinspires.ftc.teamcode.library.multimotors.MultiDcMotor;
 import org.firstinspires.ftc.teamcode.library.multimotors.MultiServo;
 
@@ -30,18 +31,14 @@ public class Kevin {
 
     public static MultiDcMotor intakeMotors = new MultiDcMotor(intake1, intake2);
 
-    // Linear Actuator
-    public static DcMotor horizontal;
+    // Extender
+    public static Extender extender = new Extender();
 
     // Linear Slide
     private static Servo rightSpool;
     private static Servo leftSpool;
 
     public static MultiServo linearSlides = new MultiServo(rightSpool, leftSpool);
-
-    // Claw
-    public static CRServo clawRotate;
-    public static Servo clawGrab;
 
     // Foundation
     private static Servo foundation1;
@@ -104,17 +101,8 @@ public class Kevin {
         linearSlides.setDirection(Servo.Direction.FORWARD);
         linearSlides.setPosition(0);
 
-        // Linear Actuator
-        horizontal = hardwareMap.get(DcMotor.class, "hzl");
-        horizontal.setDirection(DcMotorSimple.Direction.REVERSE);
-        horizontal.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Claw
-        clawRotate = hardwareMap.get(CRServo.class, "rotate");
-        clawRotate.setDirection(CRServo.Direction.FORWARD);
-
-        clawGrab = hardwareMap.get(Servo.class, "grab");
-        clawGrab.setDirection(Servo.Direction.FORWARD);
+        // Extender
+        extender.initComponent();
 
         // Foundation
         foundation1 = hardwareMap.get(Servo.class, "leftFND");
