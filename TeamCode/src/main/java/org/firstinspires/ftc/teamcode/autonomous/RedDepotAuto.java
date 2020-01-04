@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "Blue Foundation", group = "competition")
+@Autonomous(name = "Red Depot", group = "competition")
 public class RedDepotAuto extends AutonomousParent {
 
     @Override

@@ -16,8 +16,8 @@ public class Extender extends ComponentBase {
 
     private CRServo claw;
 
-    private final static double EXTEND = 1.0;
-    private final static double RETRACT = 0.0;
+    private final static double EXTEND = 0.7;
+    private final static double RETRACT = 0.2;
 
 
     @Override
