@@ -59,7 +59,7 @@ public class TeleOpParent extends LinearOpMode {
                 desiredPosition = Range.clip(desiredPosition + WINCH_INCREMENT, WINCH_MIN, WINCH_MAX);
                 Kevin.linearSlides.setPosition(desiredPosition);
                 buttonPressed = true;
-            } else {
+            } else if (buttonPressed) {
                 buttonPressed = false;
             }
 

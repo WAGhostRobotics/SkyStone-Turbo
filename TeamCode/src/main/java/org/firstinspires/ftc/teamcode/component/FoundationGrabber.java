@@ -18,7 +18,7 @@ public class FoundationGrabber {
         foundation1 = hardwareMap.get(CRServo.class, "leftFND");
         foundation1.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        foundation2 = hardwareMap.get(CRServo.class, "leftFND");
+        foundation2 = hardwareMap.get(CRServo.class, "rightFND");
         foundation2.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
@@ -27,7 +27,7 @@ public class FoundationGrabber {
             foundation1.setPower(1);
             foundation2.setPower(1);
 
-            Kevin.sleep(250);
+            Kevin.sleep(300);
 
             foundation1.setPower(0);
             foundation2.setPower(0);
@@ -41,7 +41,7 @@ public class FoundationGrabber {
             foundation1.setPower(-1);
             foundation2.setPower(-1);
 
-            Kevin.sleep(250);
+            Kevin.sleep(300);
 
             foundation1.setPower(0);
             foundation2.setPower(0);
