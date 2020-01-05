@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode.core;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.component.Extender;
 import org.firstinspires.ftc.teamcode.component.FoundationGrabber;
-import org.firstinspires.ftc.teamcode.library.multimotors.MultiDcMotor;
-import org.firstinspires.ftc.teamcode.library.multimotors.MultiServo;
+import org.firstinspires.ftc.teamcode.component.Intake;
+import org.firstinspires.ftc.teamcode.component.LinearSlides;
 
 import java.util.ArrayList;
 
@@ -26,27 +24,24 @@ public class Kevin {
     // Motor array [in order: lf, lr, rf, rr]
     public static ArrayList<DcMotor> driveMotors = new ArrayList<>();
 
-    // Intake
-    private static DcMotor intake1;
-    private static DcMotor intake2;
-
-    public static MultiDcMotor intakeMotors;
-
     // Extender
     public static Extender extender;
 
-    // Linear Slide
-    private static Servo rightSpool;
-    private static Servo leftSpool;
+    // Intake
+    public static Intake intake;
 
-    public static MultiServo linearSlides;
+    // Linear Slides
+    public static LinearSlides linearSlides;
 
+    // Foundation Grabber
     public static FoundationGrabber foundationGrabber;
 
+    /*
     // Capstone
     public static Servo capstone;
     public static final double HOLD = 0.1;
     public static final double LIBERATE = 0.9;
+    */
 
     // Gyro
     public static BNO055IMU imu;
@@ -74,10 +69,6 @@ public class Kevin {
         dBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Extender
-        extender = new Extender();
-        extender.init(hardwareMap);
-
         // Adds the motors to a motor array for easier reference
         // The order here must match the order used in {@link DriveStyle}
         driveMotors.add(dFrontLeft);
@@ -85,24 +76,19 @@ public class Kevin {
         driveMotors.add(dBackLeft);
         driveMotors.add(dBackRight);
 
-        // Init intake motors
-        intake1 = hardwareMap.get(DcMotor.class, "i1");
-        intake2 = hardwareMap.get(DcMotor.class, "i2");
+        // Extender
+        extender = new Extender();
+        extender.init(hardwareMap);
 
-        intakeMotors = new MultiDcMotor(intake1, intake2);
-
-        intakeMotors.setDirection(DcMotorSimple.Direction.REVERSE);
-        intakeMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        // Intake
+        intake = new Intake();
+        intake.init(hardwareMap);
 
         // Linear Slides
-        rightSpool = hardwareMap.get(Servo.class, "rightSpool");
-        leftSpool = hardwareMap.get(Servo.class, "leftSpool");
+        linearSlides = new LinearSlides();
+        linearSlides.init(hardwareMap);
 
-        linearSlides = new MultiServo(rightSpool, leftSpool);
-
-        linearSlides.setDirection(Servo.Direction.FORWARD);
-        linearSlides.setPosition(0);
-
+        // Foundation Grabber
         foundationGrabber = new FoundationGrabber();
         foundationGrabber.init(hardwareMap);
 

@@ -55,7 +55,7 @@ public class TeleOpParent extends LinearOpMode {
                 Kevin.linearSlides.setPosition(desiredPosition);
                 buttonPressed = true;
             } else {
-                buttonPressed = false; // TODO: does this actually work?
+                buttonPressed = false;
             }
 
             // Extender control (g2.dl/dr)
@@ -74,11 +74,11 @@ public class TeleOpParent extends LinearOpMode {
 
             // Intake (g2.b/y)
             if (gamepad2.b) {
-                Kevin.intakeMotors.setPower(1);
+                Kevin.intake.in();
             } else if (gamepad2.y) {
-                Kevin.intakeMotors.setPower(-1);
+                Kevin.intake.out();
             } else {
-                Kevin.intakeMotors.setPower(0);
+                Kevin.intake.stop();
             }
 
             // Foundation (g1.lb/rb)
@@ -90,7 +90,7 @@ public class TeleOpParent extends LinearOpMode {
 
             // Send diagnostics to user
             telemetry.addData("Status", "Running");
-            telemetry.update(); //TODO: Claw servo isn't CR, lots of lag everywhere
+            telemetry.update(); //TODO: lots of lag everywhere
         }
     }
 }

@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.core.Kevin;
 
 public class FoundationGrabber {
     // Foundation
-    private static CRServo foundation1;
-    private static CRServo foundation2;
+    private CRServo foundation1;
+    private CRServo foundation2;
 
     private boolean grab = false;
 
