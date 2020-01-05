@@ -11,7 +11,7 @@ public class LinearSlides {
     private static Servo rightSpool;
     private static Servo leftSpool;
 
-    public static MultiServo linearSlides;
+    private static MultiServo linearSlides;
 
     public void init(HardwareMap hardwareMap) {
 
@@ -19,9 +19,11 @@ public class LinearSlides {
         rightSpool = hardwareMap.get(Servo.class, "rightSpool");
         leftSpool = hardwareMap.get(Servo.class, "leftSpool");
 
+        rightSpool.setDirection(Servo.Direction.FORWARD);
+        leftSpool.setDirection(Servo.Direction.REVERSE);
+
         linearSlides = new MultiServo(rightSpool, leftSpool);
 
-        linearSlides.setDirection(Servo.Direction.FORWARD);
         linearSlides.setPosition(0);
 
     }

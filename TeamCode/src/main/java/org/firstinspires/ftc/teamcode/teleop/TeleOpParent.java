@@ -42,8 +42,13 @@ public class TeleOpParent extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            // "Gear" the drivetrain when the winches are up
+            if (desiredPosition != 0) {
+                gamepad1.left_stick_x /= 2; gamepad1.left_stick_y /= 2; gamepad1.right_stick_x /= 2;
+            }
+
             // Drivie using set drivemode (g1.ls/rs)
-            DriveStyle.driveWithType(Kevin.driveMotors, gamepad1, type); //TODO: Refactor so that gears/half power winches work
+            DriveStyle.driveWithType(Kevin.driveMotors, gamepad1, type);
 
             // Winch control (g2.du/dd)
             if (gamepad2.dpad_down && !buttonPressed) {
