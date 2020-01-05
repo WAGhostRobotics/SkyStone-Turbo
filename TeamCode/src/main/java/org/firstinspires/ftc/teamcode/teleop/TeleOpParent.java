@@ -90,7 +90,7 @@ public class TeleOpParent extends LinearOpMode {
 
             // Send diagnostics to user
             telemetry.addData("Status", "Running");
-            telemetry.update(); //TODO: Claw servo isn't CR, z-lift crashes app, lots of lag everywhere
+            telemetry.update(); //TODO: Claw servo isn't CR, lots of lag everywhere
         }
     }
 }

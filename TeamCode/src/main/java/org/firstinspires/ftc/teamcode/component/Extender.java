@@ -15,10 +15,13 @@ public class Extender {
 
     private MultiServo zLift;
 
-    private CRServo claw;
+    private Servo claw;
 
     private final static double EXTEND = 0.7;
     private final static double RETRACT = 0.2;
+
+    private final static double OPEN = 0.7;
+    private final static double CLOSE = 0.2;
 
     public void init(HardwareMap hardwareMap) {
         right = hardwareMap.get(Servo.class, "zRight");
@@ -29,8 +32,8 @@ public class Extender {
 
         zLift = new MultiServo(right, left);
 
-        claw = hardwareMap.get(CRServo.class, "claw");
-        claw.setDirection(DcMotorSimple.Direction.FORWARD);
+        claw = hardwareMap.get(Servo.class, "claw");
+        claw.setDirection(Servo.Direction.FORWARD);
     }
 
     public void extend() {
@@ -42,14 +45,10 @@ public class Extender {
     }
 
     public void openClaw() {
-        claw.setPower(1);
-        Kevin.sleep(250);
-        claw.setPower(0);
+        claw.setPosition(OPEN);
     }
 
     public void closeClaw() {
-        claw.setPower(-1);
-        Kevin.sleep(250);
-        claw.setPower(0);
+        claw.setPosition(CLOSE);
     }
 }
