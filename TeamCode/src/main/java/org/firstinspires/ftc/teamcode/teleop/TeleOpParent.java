@@ -15,7 +15,7 @@ public class TeleOpParent extends LinearOpMode {
 
     // Winch variables/constants
     private double desiredPosition = 0.0;
-    private boolean buttonPressed = false;
+    private boolean buttonWasPressed = false;
 
     private static double WINCH_INCREMENT = 0.05;
 
@@ -51,16 +51,16 @@ public class TeleOpParent extends LinearOpMode {
             DriveStyle.driveWithType(Kevin.driveMotors, gamepad1, type);
 
             // Winch control (g2.du/dd)
-            if (gamepad2.dpad_down && !buttonPressed) {
+            if (gamepad2.dpad_down && !buttonWasPressed) {
                 desiredPosition = Range.clip(desiredPosition - WINCH_INCREMENT, WINCH_MIN, WINCH_MAX);
                 Kevin.linearSlides.setPosition(desiredPosition);
-                buttonPressed = true;
-            } else if (gamepad2.dpad_up && !buttonPressed) {
+                buttonWasPressed = true;
+            } else if (gamepad2.dpad_up && !buttonWasPressed) {
                 desiredPosition = Range.clip(desiredPosition + WINCH_INCREMENT, WINCH_MIN, WINCH_MAX);
                 Kevin.linearSlides.setPosition(desiredPosition);
-                buttonPressed = true;
-            } else if (buttonPressed) {
-                buttonPressed = false;
+                buttonWasPressed = true;
+            } else if (buttonWasPressed && !gamepad2.dpad_up && gamepad2.dpad_down) {
+                buttonWasPressed = false;
             }
 
             // Extender control (g2.dl/dr)
@@ -91,6 +91,8 @@ public class TeleOpParent extends LinearOpMode {
                 Kevin.foundationGrabber.grab();
             } else if (gamepad1.right_bumper) {
                 Kevin.foundationGrabber.release();
+            } else {
+                Kevin.foundationGrabber.stop();
             }
 
             // Send diagnostics to user

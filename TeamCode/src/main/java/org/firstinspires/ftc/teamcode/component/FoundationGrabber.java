@@ -23,30 +23,17 @@ public class FoundationGrabber {
     }
 
     public void grab() {
-        if (!grab) {
-            foundation1.setPower(1);
-            foundation2.setPower(1);
-
-            Kevin.sleep(300);
-
-            foundation1.setPower(0);
-            foundation2.setPower(0);
-
-            grab = true;
-        }
+        foundation1.setPower(1);
+        foundation2.setPower(1);
     }
 
     public void release() {
-        if (grab) {
-            foundation1.setPower(-1);
-            foundation2.setPower(-1);
+        foundation1.setPower(-1);
+        foundation2.setPower(-1);
+    }
 
-            Kevin.sleep(300);
-
-            foundation1.setPower(0);
-            foundation2.setPower(0);
-
-            grab = false;
-        }
+    public void stop() {
+        foundation1.setPower(0);
+        foundation2.setPower(0);
     }
 }
