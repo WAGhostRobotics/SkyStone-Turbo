@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.component.Extender;
+import org.firstinspires.ftc.teamcode.component.FoundationGrabber;
 import org.firstinspires.ftc.teamcode.library.multimotors.MultiDcMotor;
 import org.firstinspires.ftc.teamcode.library.multimotors.MultiServo;
 
@@ -29,25 +30,18 @@ public class Kevin {
     private static DcMotor intake1;
     private static DcMotor intake2;
 
-    public static MultiDcMotor intakeMotors = new MultiDcMotor(intake1, intake2);
+    public static MultiDcMotor intakeMotors;
 
     // Extender
-    public static Extender extender = new Extender();
+    public static Extender extender;
 
     // Linear Slide
     private static Servo rightSpool;
     private static Servo leftSpool;
 
-    public static MultiServo linearSlides = new MultiServo(rightSpool, leftSpool);
+    public static MultiServo linearSlides;
 
-    // Foundation
-    private static Servo foundation1;
-    private static Servo foundation2;
-
-    public static MultiServo foundation = new MultiServo(foundation1, foundation2);
-
-    public static final double RELEASE = 0;
-    public static final double GRAB = 1;
+    public static FoundationGrabber foundationGrabber;
 
     // Capstone
     public static Servo capstone;
@@ -80,6 +74,10 @@ public class Kevin {
         dBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        // Extender
+        extender = new Extender();
+        extender.init(hardwareMap);
+
         // Adds the motors to a motor array for easier reference
         // The order here must match the order used in {@link DriveStyle}
         driveMotors.add(dFrontLeft);
@@ -91,6 +89,8 @@ public class Kevin {
         intake1 = hardwareMap.get(DcMotor.class, "i1");
         intake2 = hardwareMap.get(DcMotor.class, "i2");
 
+        intakeMotors = new MultiDcMotor(intake1, intake2);
+
         intakeMotors.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotors.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -98,22 +98,30 @@ public class Kevin {
         rightSpool = hardwareMap.get(Servo.class, "rightSpool");
         leftSpool = hardwareMap.get(Servo.class, "leftSpool");
 
+        linearSlides = new MultiServo(rightSpool, leftSpool);
+
         linearSlides.setDirection(Servo.Direction.FORWARD);
         linearSlides.setPosition(0);
 
-        // Extender
-        extender.initComponent();
-
-        // Foundation
-        foundation1 = hardwareMap.get(Servo.class, "leftFND");
-        foundation1.setDirection(Servo.Direction.FORWARD);
-
-        foundation2 = hardwareMap.get(Servo.class, "leftFND");
-        foundation2.setDirection(Servo.Direction.REVERSE);
-
-        foundation.setPosition(RELEASE);
+        foundationGrabber = new FoundationGrabber();
+        foundationGrabber.init(hardwareMap);
 
         // Gyro
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+    }
+
+    /**
+     * Sleeps for the given amount of milliseconds, or until the thread is interrupted. This is
+     * simple shorthand for the operating-system-provided {@link Thread#sleep(long) sleep()} method.
+     *
+     * @param milliseconds amount of time to sleep, in milliseconds
+     * @see Thread#sleep(long)
+     */
+    public static void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

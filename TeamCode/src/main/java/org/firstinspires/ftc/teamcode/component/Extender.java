@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode.component;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.core.ComponentBase;
+import org.firstinspires.ftc.teamcode.core.Kevin;
 import org.firstinspires.ftc.teamcode.library.multimotors.MultiServo;
 
-public class Extender extends ComponentBase {
+public class Extender {
 
     private Servo right;
     private Servo left;
@@ -19,9 +20,7 @@ public class Extender extends ComponentBase {
     private final static double EXTEND = 0.7;
     private final static double RETRACT = 0.2;
 
-
-    @Override
-    public void initComponent() {
+    public void init(HardwareMap hardwareMap) {
         right = hardwareMap.get(Servo.class, "zRight");
         left = hardwareMap.get(Servo.class, "zLeft");
 
@@ -42,13 +41,13 @@ public class Extender extends ComponentBase {
 
     public void openClaw() {
         claw.setPower(1);
-        sleep(250);
+        Kevin.sleep(250);
         claw.setPower(0);
     }
 
     public void closeClaw() {
         claw.setPower(-1);
-        sleep(250);
+        Kevin.sleep(250);
         claw.setPower(0);
     }
 }

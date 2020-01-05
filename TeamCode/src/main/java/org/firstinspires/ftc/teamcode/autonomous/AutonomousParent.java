@@ -57,7 +57,7 @@ public class AutonomousParent extends CVLinearOpMode {
     }
 
     void grabFoundation() {
-        Kevin.foundation.setPosition(Kevin.GRAB);
+        Kevin.foundationGrabber.grab();
     }
 
     void moveFoundationBack() {
@@ -65,7 +65,7 @@ public class AutonomousParent extends CVLinearOpMode {
     }
 
     void releaseFoundation() {
-        Kevin.foundation.setPosition(Kevin.RELEASE);
+        Kevin.foundationGrabber.release();
     }
 
     void parkOnLine(LinePosition position) {

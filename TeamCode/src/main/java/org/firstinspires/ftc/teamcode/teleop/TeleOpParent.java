@@ -83,14 +83,14 @@ public class TeleOpParent extends LinearOpMode {
 
             // Foundation (g1.lb/rb)
             if (gamepad1.left_bumper) {
-                Kevin.foundation.setPosition(Kevin.GRAB);
+                Kevin.foundationGrabber.grab();
             } else if (gamepad1.right_bumper) {
-                Kevin.foundation.setPosition(Kevin.RELEASE);
+                Kevin.foundationGrabber.release();
             }
 
             // Send diagnostics to user
             telemetry.addData("Status", "Running");
-            telemetry.update();
+            telemetry.update(); //TODO: Claw servo isn't CR, z-lift crashes app, lots of lag everywhere
         }
     }
 }
