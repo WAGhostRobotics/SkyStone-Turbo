@@ -13,8 +13,6 @@ public class Extender {
     private Servo right;
     private Servo left;
 
-    private MultiServo zLift;
-
     private Servo claw;
 
     private final static double EXTEND = 0.7;
@@ -30,18 +28,18 @@ public class Extender {
         right.setDirection(Servo.Direction.FORWARD);
         left.setDirection(Servo.Direction.REVERSE);
 
-        zLift = new MultiServo(right, left);
-
         claw = hardwareMap.get(Servo.class, "claw");
         claw.setDirection(Servo.Direction.FORWARD);
     }
 
     public void extend() {
-        zLift.setPosition(EXTEND);
+        right.setPosition(EXTEND);
+        left.setPosition(EXTEND);
     }
 
     public void retract() {
-        zLift.setPosition(RETRACT);
+        right.setPosition(RETRACT);
+        left.setPosition(RETRACT);
     }
 
     public void openClaw() {
