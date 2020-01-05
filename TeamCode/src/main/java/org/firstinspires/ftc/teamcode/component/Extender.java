@@ -13,7 +13,7 @@ public class Extender {
     private Servo right;
     private Servo left;
 
-    private MultiServo zLift = new MultiServo(right, left);
+    private MultiServo zLift;
 
     private CRServo claw;
 
@@ -26,6 +26,8 @@ public class Extender {
 
         right.setDirection(Servo.Direction.FORWARD);
         left.setDirection(Servo.Direction.REVERSE);
+
+        zLift = new MultiServo(right, left);
 
         claw = hardwareMap.get(CRServo.class, "claw");
         claw.setDirection(DcMotorSimple.Direction.FORWARD);
