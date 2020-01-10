@@ -76,8 +76,10 @@ public abstract class CVLinearOpMode extends LinearOpMode {
     private float phoneYRotate    = 0;
     private float phoneZRotate    = 0;
 
-    @Override
-    public void runOpMode() throws InterruptedException {
+    VuforiaTrackables targetsSkyStone;
+    List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+
+    public void initVuforia() {
         /*
          * Retrieve the camera we are to use.
          */
@@ -105,7 +107,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
 
         // Load the data sets for the trackable objects. For OpenRC, these are loaded from
         // the internal storage to reduce APK size
-        VuforiaTrackables targetsSkyStone = this.vuforia.loadTrackablesFromFile("/sdcard/FIRST/Skystone");
+        targetsSkyStone = this.vuforia.loadTrackablesFromFile("/sdcard/FIRST/Skystone");
 
         VuforiaTrackable stoneTarget = targetsSkyStone.get(0);
         stoneTarget.setName("Stone Target");
@@ -135,7 +137,6 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         rear2.setName("Rear Perimeter 2");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
-        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targetsSkyStone);
 
         /**
@@ -253,55 +254,47 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         for (VuforiaTrackable trackable : allTrackables) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
+    }
 
-        // WARNING:
-        // In this sample, we do not wait for PLAY to be pressed.  Target Tracking is started immediately when INIT is pressed.
-        // This sequence is used to enable the new remote DS Camera Preview feature to be used with this sample.
-        // CONSEQUENTLY do not put any driving commands in this loop.
-        // To restore the normal opmode structure, just un-comment the following line:
-
-        // waitForStart();
-
-        // Note: To use the remote camera preview:
-        // AFTER you hit Init on the Driver Station, use the "options menu" to select "Camera Stream"
-        // Tap the preview window to receive a fresh image.
-
+    public void vuforiaActivate() {
         targetsSkyStone.activate();
-        while (!isStopRequested()) {
+    }
 
-            // check all the trackable targets to see which one (if any) is visible.
-            targetVisible = false;
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-                    targetVisible = true;
+    public void vuforiaScan() {
+        // check all the trackable targets to see which one (if any) is visible.
+        targetVisible = false;
+        for (VuforiaTrackable trackable : allTrackables) {
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                telemetry.addData("Visible Target", trackable.getName());
+                targetVisible = true;
 
-                    // getUpdatedRobotLocation() will return null if no new information is available since
-                    // the last time that call was made, or if the trackable is not currently visible.
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                    if (robotLocationTransform != null) {
-                        lastLocation = robotLocationTransform;
-                    }
-                    break;
+                // getUpdatedRobotLocation() will return null if no new information is available since
+                // the last time that call was made, or if the trackable is not currently visible.
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                if (robotLocationTransform != null) {
+                    lastLocation = robotLocationTransform;
                 }
+                break;
             }
-
-            // Provide feedback as to where the robot is located (if we know).
-            if (targetVisible) {
-                // express position (translation) of robot in inches.
-                VectorF translation = lastLocation.getTranslation();
-                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-                // express the rotation of the robot in degrees.
-                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-            } else {
-                telemetry.addData("Visible Target", "none");
-            }
-            telemetry.update();
         }
 
+        // Provide feedback as to where the robot is located (if we know).
+        if (targetVisible) {
+            // express position (translation) of robot in inches.
+            VectorF translation = lastLocation.getTranslation();
+            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+            // express the rotation of the robot in degrees.
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+        } else {
+            telemetry.addData("Visible Target", "none");
+        }
+        telemetry.update();
+    }
+
+    public void vuforiaDeactivate(){
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
     }
