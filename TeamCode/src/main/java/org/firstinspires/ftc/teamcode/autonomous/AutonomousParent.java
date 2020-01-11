@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import org.firstinspires.ftc.teamcode.core.CVLinearOpMode;
 import org.firstinspires.ftc.teamcode.core.Kevin;
 import org.firstinspires.ftc.teamcode.library.DriveAuto;
+import org.firstinspires.ftc.teamcode.library.DriveStyle;
 
 public class AutonomousParent extends CVLinearOpMode {
 
@@ -20,12 +21,19 @@ public class AutonomousParent extends CVLinearOpMode {
         telemetry.update();
 
         Kevin.init(hardwareMap);
+        vuforiaInit();
+        vuforiaActivate();
 
         // Send diagnostics to user
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        waitForStart();
+        while (!isStarted() && !isStopRequested()) {
+            vuforiaScan();
+            telemetry.addData("last location?: ", getTranslation());
+        }
+
+        vuforiaDeactivate();
 
         switch (startLocation) {
             case FOUNDATION:
@@ -48,6 +56,23 @@ public class AutonomousParent extends CVLinearOpMode {
             case DEPOT:
                 parkOnLine(LinePosition.WALL);
         }
+    }
+
+    void moveTowardsSkystone() {
+        // x-distance
+        while (lastLocation.getTranslation().get(0) * mmPerInch > 6) {
+            DriveStyle.MecanumTank(Kevin.driveMotors, 0.5, 0, 0, 0, 1);
+            vuforiaScan();
+        }
+        DriveStyle.stop(Kevin.driveMotors);
+
+        // y-distance
+        while (lastLocation.getTranslation().get(1) * mmPerInch > 6) {
+            DriveStyle.MecanumTank(Kevin.driveMotors, 0.5, -1, -1, 0, 0);
+            vuforiaScan();
+        }
+        DriveStyle.stop(Kevin.driveMotors);
+
     }
 
     void moveRobotTowardsFoundation() {

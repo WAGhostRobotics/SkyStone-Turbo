@@ -24,8 +24,8 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public abstract class CVLinearOpMode extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    private static final boolean PHONE_IS_PORTRAIT = false  ;
+    protected static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    protected static final boolean PHONE_IS_PORTRAIT = false  ;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -39,31 +39,33 @@ public abstract class CVLinearOpMode extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY =
+    protected static final String VUFORIA_KEY =
             "AZoFZrX/////AAABmWAZ6Ga0C06Shdn8BBIra9kpUV8YgKa+C9ggtup145LPUfAn+k1okjUV/NBZyx3NUuAp1XwZ8HY9v4SqbeLjhwtMhgWTMXV+3EeLgvVgrH+VmqyVrX58OkGdFsu4cC0QZgoKFuqPTSfefFASyXnAhOoAuXod/dUb4v1Rf2CJl7M4whSiLBBFFYn0JIwTNjnJ6H+2wYnQPTCPqfuh96XpeD7vUMbJNrlafV/wIuodAXJnTjw6IY0So5dDlHFq2Sx2fsxdB0kLxpYQjTomDoH8QzuWWbZawqJEMuNEHDH4rTJmKlx9iJZDeMnnMml7VOARG4nf04KMCvZkKWn+xouU51PkxdvHqutxLz0jkyCzk1lj";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    protected static final float mmPerInch        = 25.4f;
+    protected static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
     // Constant for Stone Target
-    private static final float stoneZ = 2.00f * mmPerInch;
+    protected static final float stoneZ = 2.00f * mmPerInch;
 
     // Constants for the center support targets
-    private static final float bridgeZ = 6.42f * mmPerInch;
-    private static final float bridgeY = 23 * mmPerInch;
-    private static final float bridgeX = 5.18f * mmPerInch;
-    private static final float bridgeRotY = 59;                                 // Units are degrees
-    private static final float bridgeRotZ = 180;
+    protected static final float bridgeZ = 6.42f * mmPerInch;
+    protected static final float bridgeY = 23 * mmPerInch;
+    protected static final float bridgeX = 5.18f * mmPerInch;
+    protected static final float bridgeRotY = 59;                                 // Units are degrees
+    protected static final float bridgeRotZ = 180;
 
     // Constants for perimeter targets
-    private static final float halfField = 72 * mmPerInch;
-    private static final float quadField  = 36 * mmPerInch;
+    protected static final float halfField = 72 * mmPerInch;
+    protected static final float quadField  = 36 * mmPerInch;
 
     // Class Members
-    private OpenGLMatrix lastLocation = null;
-    private VuforiaLocalizer vuforia = null;
+    protected OpenGLMatrix lastLocation = null;
+    protected VuforiaLocalizer vuforia = null;
+
+    VectorF translation;
 
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
@@ -71,19 +73,19 @@ public abstract class CVLinearOpMode extends LinearOpMode {
      */
     WebcamName webcamName = null;
 
-    private boolean targetVisible = false;
-    private float phoneXRotate    = 0;
-    private float phoneYRotate    = 0;
-    private float phoneZRotate    = 0;
+    protected boolean targetVisible = false;
+    protected float phoneXRotate    = 0;
+    protected float phoneYRotate    = 0;
+    protected float phoneZRotate    = 0;
 
     VuforiaTrackables targetsSkyStone;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
 
-    public void initVuforia() {
+    public void vuforiaInit() {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcamName = hardwareMap.get(WebcamName.class, "bertha");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -281,7 +283,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         // Provide feedback as to where the robot is located (if we know).
         if (targetVisible) {
             // express position (translation) of robot in inches.
-            VectorF translation = lastLocation.getTranslation();
+            translation = lastLocation.getTranslation();
             telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                     translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
@@ -297,5 +299,9 @@ public abstract class CVLinearOpMode extends LinearOpMode {
     public void vuforiaDeactivate(){
         // Disable Tracking when we are done;
         targetsSkyStone.deactivate();
+    }
+
+    public VectorF getTranslation() {
+        return translation;
     }
 }

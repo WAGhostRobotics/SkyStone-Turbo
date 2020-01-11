@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.core.Kevin;
 import org.firstinspires.ftc.teamcode.library.multimotors.MultiServo;
 
+import static org.firstinspires.ftc.teamcode.core.Kevin.sleep;
+
 public class Extender {
 
     private Servo right;
@@ -15,8 +17,8 @@ public class Extender {
 
     private Servo claw;
 
-    private final static double EXTEND = 0.7;
-    private final static double RETRACT = 0.2;
+    private final static double EXTEND = 0;
+    private final static double RETRACT = 0.47;
 
     private final static double OPEN = 0.7;
     private final static double CLOSE = 0.2;
