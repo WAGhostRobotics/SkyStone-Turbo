@@ -76,9 +76,9 @@ public class AutonomousParent extends CVLinearOpMode {
     }
 
     void moveRobotTowardsFoundation() {
-        drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.RIGHT : DriveAuto.MoveDirection.LEFT,
+        drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.LEFT : DriveAuto.MoveDirection.RIGHT,
                 0.3, 1);
-        drivetrain.move(DriveAuto.MoveDirection.BACKWARD, 0.3, 2);
+        drivetrain.move(DriveAuto.MoveDirection.FORWARD, 0.3, 2);
     }
 
     void grabFoundation() {
@@ -86,7 +86,7 @@ public class AutonomousParent extends CVLinearOpMode {
     }
 
     void moveFoundationBack() {
-        drivetrain.move(DriveAuto.MoveDirection.FORWARD, 0.4, 2.45);
+        drivetrain.move(DriveAuto.MoveDirection.BACKWARD, 0.4, 2.45);
     }
 
     void releaseFoundation() {
@@ -96,14 +96,14 @@ public class AutonomousParent extends CVLinearOpMode {
     void parkOnLine(LinePosition position) {
         switch (position) {
             case CENTER_SKYBRIDGE:
-                drivetrain.move(DriveAuto.MoveDirection.BACKWARD, 0.3, 2);
+                drivetrain.move(DriveAuto.MoveDirection.FORWARD, 0.3, 2);
             case WALL:
                 switch (startLocation) {
                     case FOUNDATION:
-                        drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.LEFT : DriveAuto.MoveDirection.RIGHT,
+                        drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.RIGHT : DriveAuto.MoveDirection.LEFT,
                                 0.7, 2.25);
                     case DEPOT:
-                        drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.RIGHT : DriveAuto.MoveDirection.LEFT,
+                        drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.LEFT : DriveAuto.MoveDirection.RIGHT,
                                 0.7, 2);
                 }
         }
