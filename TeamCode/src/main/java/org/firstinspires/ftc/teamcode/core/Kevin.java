@@ -58,10 +58,11 @@ public class Kevin {
 
         // Adjust motor directions - this decides which side of the robot is "front"
         // Flip the values to change the direction the robot "faces"
-        dFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        // The motors turn counterclockwise looking at them head on for FORWARD; set the right ones to reverse for correct operation
+        dFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         dFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         dBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        dBackRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        dBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Adjust motor stopping behavior; "BRAKE" locks the motor shaft, while "FLOAT" just stops applying power
         dFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

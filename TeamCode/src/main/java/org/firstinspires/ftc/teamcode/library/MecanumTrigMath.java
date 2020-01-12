@@ -61,30 +61,9 @@ public class MecanumTrigMath {
         double theta = vector[1]; //for convenience and readability
 
         double[] motorValues = {magnitude * Math.sin(theta + Math.PI/4) - turn, magnitude * Math.sin(theta - Math.PI/4 - turn),
-                                magnitude * Math.sin(theta + Math.PI/4) + turn, magnitude * Math.sin(theta - Math.PI/4 + turn)};
+                                magnitude * Math.sin(theta - Math.PI/4) + turn, magnitude * Math.sin(theta + Math.PI/4 + turn)};
 
-        return normalize(motorValues); //optional - but it shouldn't break anything to include it
-    }
-
-    //===========================[Legacy Methods]==============================================
-
-    /**
-     * Converts controller input (x and y) to motor values.
-     *
-     * @param x    controller input for the x-axis
-     * @param y    controller input for the y-axis
-     * @param turn controller input for turning
-     * @return motor values for the four motors
-     */
-    public static double[] vectorToMotors(double x, double y, double turn) {
-
-        // create the input velocity components
-        double[] inputComponents = new double[]{x, y};
-
-        // transform the input velocity vector components into polar form
-        double[] velocity = componentsToVector(inputComponents);
-
-        return vectorToMotors(velocity, turn);
+        return normalize(motorValues); //pretty important - this helps to make sure the motors don't turn slower than we need them to
     }
 
     /**
@@ -111,6 +90,27 @@ public class MecanumTrigMath {
 
 
         return vector;  //returns normalized vector
+    }
+
+    //===========================[Legacy Methods]==============================================
+
+    /**
+     * Converts controller input (x and y) to motor values.
+     *
+     * @param x    controller input for the x-axis
+     * @param y    controller input for the y-axis
+     * @param turn controller input for turning
+     * @return motor values for the four motors
+     */
+    public static double[] vectorToMotors(double x, double y, double turn) {
+
+        // create the input velocity components
+        double[] inputComponents = new double[]{x, y};
+
+        // transform the input velocity vector components into polar form
+        double[] velocity = componentsToVector(inputComponents);
+
+        return vectorToMotors(velocity, turn);
     }
 
     /**

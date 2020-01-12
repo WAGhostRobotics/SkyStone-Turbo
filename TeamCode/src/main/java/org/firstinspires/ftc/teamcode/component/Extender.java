@@ -20,7 +20,7 @@ public class Extender {
     private final static double EXTEND = 0;
     private final static double RETRACT = 0.47;
 
-    private final static double OPEN = 0.7;
+    private final static double OPEN = 1;
     private final static double CLOSE = 0.2;
 
     public void init(HardwareMap hardwareMap) {

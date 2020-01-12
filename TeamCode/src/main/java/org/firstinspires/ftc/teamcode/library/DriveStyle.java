@@ -29,7 +29,7 @@ public class DriveStyle {
      * @param motors array of motors [lf, lb, rf, rb]
      */
     public static void MecanumArcade(ArrayList<DcMotor> motors, double multiplier, double x, double y, double turn) {
-        double[] motorPowerArray = MecanumTrigMath.vectorToMotors(x, y, turn);
+        double[] motorPowerArray = MecanumTrigMath.inputsToMotors(x, y, turn);
         motors.get(0).setPower(multiplier * motorPowerArray[0]);
         motors.get(1).setPower(multiplier * motorPowerArray[1]);
         motors.get(2).setPower(multiplier * motorPowerArray[2]);

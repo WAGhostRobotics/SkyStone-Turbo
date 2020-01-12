@@ -43,11 +43,13 @@ public class TeleOpParent extends LinearOpMode {
         while (opModeIsActive()) {
 
             // "Gear" the drivetrain when the winches are up
-            if (desiredPosition != 0) {
+            /*
+            if (desiredPosition > 0.1) {
                 gamepad1.left_stick_x /= 2; gamepad1.left_stick_y /= 2; gamepad1.right_stick_x /= 2;
             }
+            */
 
-            // Drivie using set drivemode (g1.ls/rs)
+            // Drivie using set drivemode (g1.ls/rs, g1.lb/rb)
             DriveStyle.driveWithType(Kevin.driveMotors, gamepad1, type);
 
             // Winch control (g2.du/dd)
@@ -59,7 +61,9 @@ public class TeleOpParent extends LinearOpMode {
                 desiredPosition = Range.clip(desiredPosition + WINCH_INCREMENT, WINCH_MIN, WINCH_MAX);
                 Kevin.linearSlides.setPosition(desiredPosition);
                 buttonWasPressed = true;
-            } else if (buttonWasPressed && !gamepad2.dpad_up && gamepad2.dpad_down) {
+            }
+
+            if (buttonWasPressed && !gamepad2.dpad_up && !gamepad2.dpad_down) {
                 buttonWasPressed = false;
             }
 
@@ -91,13 +95,10 @@ public class TeleOpParent extends LinearOpMode {
                 Kevin.foundationGrabber.grab();
             } else if (gamepad1.right_bumper) {
                 Kevin.foundationGrabber.release();
-            } else {
-                Kevin.foundationGrabber.stop();
             }
 
             // Send diagnostics to user
             telemetry.addData("Status", "Running");
-            telemetry.update(); //TODO: lots of lag everywhere
         }
     }
 }

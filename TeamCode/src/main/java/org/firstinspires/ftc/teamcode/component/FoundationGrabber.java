@@ -3,37 +3,34 @@ package org.firstinspires.ftc.teamcode.component;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.core.Kevin;
 
 public class FoundationGrabber {
     // Foundation
-    private CRServo foundation1;
-    private CRServo foundation2;
+    private Servo foundation1;
+    private Servo foundation2;
 
-    private boolean grab = false;
+    private final static double GRAB = 0.7;
+    private final static double RELEASE = 0.2;
 
     public void init(HardwareMap hardwareMap) {
         // Foundation
-        foundation1 = hardwareMap.get(CRServo.class, "leftFND");
-        foundation1.setDirection(DcMotorSimple.Direction.FORWARD);
+        foundation1 = hardwareMap.get(Servo.class, "leftFND");
+        foundation1.setDirection(Servo.Direction.FORWARD);
 
-        foundation2 = hardwareMap.get(CRServo.class, "rightFND");
-        foundation2.setDirection(DcMotorSimple.Direction.REVERSE);
+        foundation2 = hardwareMap.get(Servo.class, "rightFND");
+        foundation2.setDirection(Servo.Direction.REVERSE);
     }
 
     public void grab() {
-        foundation1.setPower(1);
-        foundation2.setPower(1);
+        foundation1.setPosition(GRAB);
+        foundation2.setPosition(GRAB);
     }
 
     public void release() {
-        foundation1.setPower(-1);
-        foundation2.setPower(-1);
-    }
-
-    public void stop() {
-        foundation1.setPower(0);
-        foundation2.setPower(0);
+        foundation1.setPosition(RELEASE);
+        foundation2.setPosition(RELEASE);
     }
 }
