@@ -59,9 +59,9 @@ public class Kevin {
         // Adjust motor directions - this decides which side of the robot is "front"
         // Flip the values to change the direction the robot "faces"
         // The motors turn counterclockwise looking at them head on for FORWARD; set the right ones to reverse for correct operation
-        dFrontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        dFrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         dFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        dBackLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        dBackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         dBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Adjust motor stopping behavior; "BRAKE" locks the motor shaft, while "FLOAT" just stops applying power
@@ -73,8 +73,8 @@ public class Kevin {
         // Adds the motors to a motor array for easier reference
         // The order here must match the order used in {@link DriveStyle}
         driveMotors.add(dFrontLeft);
-        driveMotors.add(dFrontRight);
         driveMotors.add(dBackLeft);
+        driveMotors.add(dFrontRight);
         driveMotors.add(dBackRight);
 
         // Extender

@@ -19,8 +19,6 @@ public class TeleOpParent extends LinearOpMode {
 
     private static double WINCH_INCREMENT = 0.05;
 
-    private static double TRIGGER_MINIMUM = 0.1;
-
     // Set default DriveType
     DriveStyle.DriveType type = DriveStyle.DriveType.MECANUMARCADE;
 

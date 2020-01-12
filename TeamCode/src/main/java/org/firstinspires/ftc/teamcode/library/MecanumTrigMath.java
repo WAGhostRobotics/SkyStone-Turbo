@@ -36,6 +36,8 @@ package org.firstinspires.ftc.teamcode.library;
 
 public class MecanumTrigMath {
 
+    public static double SQRT_2 = Math.sqrt(2);
+
     //=============================[Trig Methods]==============================================
     /**
      * Converts vector components into magnitude and direction form. Works for 2d vectors only.
@@ -54,16 +56,36 @@ public class MecanumTrigMath {
      *
      * @param vector a double[] vector in the form [magnitude, direction]
      * @param turn a turn value between -1 and 1 describing the direction the robot should turn
-     * @return motor values [lf, lr, rf, rr]
+     * @return motor values [lf, lb, rf, rb]
      */
     public static double[] vectorToMotors(double[] vector, double turn) {
         double magnitude = vector[0];
         double theta = vector[1]; //for convenience and readability
 
-        double[] motorValues = {magnitude * Math.sin(theta + Math.PI/4) - turn, magnitude * Math.sin(theta - Math.PI/4 - turn),
-                                magnitude * Math.sin(theta - Math.PI/4) + turn, magnitude * Math.sin(theta + Math.PI/4 + turn)};
+        boolean needsScaling = false;
 
-        return normalize(motorValues); //pretty important - this helps to make sure the motors don't turn slower than we need them to
+        double[] motorValues = {SQRT_2 * magnitude * Math.sin(theta - Math.PI/4) + turn, SQRT_2 * magnitude * Math.sin(theta + Math.PI/4) - turn,
+                                SQRT_2 * magnitude * Math.sin(theta + Math.PI/4) + turn, SQRT_2 * magnitude * Math.sin(theta - Math.PI/4) - turn};
+
+        for (double motorValue : motorValues) {
+            if (Math.abs(motorValue) > 1) {
+                needsScaling = true;
+                break;
+            }
+        }
+
+        if (needsScaling) {
+            double scalar = 1 / Math.max(Math.abs(motorValues[0]),
+                    Math.max(Math.abs(motorValues[1]),
+                            Math.max(Math.abs(motorValues[2]),
+                                    Math.abs(motorValues[3]))));
+
+            for (int i = 0; i < motorValues.length; i++) {
+                motorValues[i] *= scalar;
+            }
+        }
+
+        return motorValues;
     }
 
     /**

@@ -12,16 +12,16 @@ public class FoundationGrabber {
     private Servo foundation1;
     private Servo foundation2;
 
-    private final static double GRAB = 0.7;
-    private final static double RELEASE = 0.2;
+    private final static double RELEASE = 0.7;
+    private final static double GRAB = 0;
 
     public void init(HardwareMap hardwareMap) {
         // Foundation
         foundation1 = hardwareMap.get(Servo.class, "leftFND");
-        foundation1.setDirection(Servo.Direction.FORWARD);
+        foundation1.setDirection(Servo.Direction.REVERSE);
 
         foundation2 = hardwareMap.get(Servo.class, "rightFND");
-        foundation2.setDirection(Servo.Direction.REVERSE);
+        foundation2.setDirection(Servo.Direction.FORWARD);
     }
 
     public void grab() {

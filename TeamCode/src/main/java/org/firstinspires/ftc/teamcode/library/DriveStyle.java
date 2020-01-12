@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class DriveStyle {
 
+    private static double TRIGGER_MINIMUM = 0.1;
+
     public static void Tank(ArrayList<DcMotor> motors, double multiplier, double left, double right) {
         motors.get(0).setPower(multiplier * left);
         motors.get(1).setPower(multiplier * left);
@@ -100,9 +102,9 @@ public class DriveStyle {
     private static double gear(Gamepad gamepad) {
         double gear;
 
-        if (gamepad.left_bumper && gamepad.right_bumper) {
+        if (gamepad.left_trigger > TRIGGER_MINIMUM && gamepad.right_trigger > TRIGGER_MINIMUM) {
             gear = .25;
-        } else if (gamepad.left_bumper || gamepad.right_bumper) {
+        } else if (gamepad.left_trigger > TRIGGER_MINIMUM || gamepad.right_trigger > TRIGGER_MINIMUM) {
             gear = .5;
         } else {
             gear = 1;
