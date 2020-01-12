@@ -85,7 +85,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "bertha");
+        // webcamName = hardwareMap.get(WebcamName.class, "bertha");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.

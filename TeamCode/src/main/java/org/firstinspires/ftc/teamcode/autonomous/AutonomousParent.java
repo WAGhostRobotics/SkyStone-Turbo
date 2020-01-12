@@ -21,19 +21,23 @@ public class AutonomousParent extends CVLinearOpMode {
         telemetry.update();
 
         Kevin.init(hardwareMap);
+        /*
         vuforiaInit();
         vuforiaActivate();
+        */
 
         // Send diagnostics to user
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        while (!isStarted() && !isStopRequested()) {
-            vuforiaScan();
-            telemetry.addData("last location?: ", getTranslation());
-        }
+        waitForStart();
 
-        vuforiaDeactivate();
+//        while (!isStarted() && !isStopRequested()) {
+//            vuforiaScan();
+//            telemetry.addData("last location?: ", getTranslation());
+//        }
+
+        //vuforiaDeactivate();
 
         switch (startLocation) {
             case FOUNDATION:
@@ -77,8 +81,8 @@ public class AutonomousParent extends CVLinearOpMode {
 
     void moveRobotTowardsFoundation() {
         drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.LEFT : DriveAuto.MoveDirection.RIGHT,
-                0.3, 1);
-        drivetrain.move(DriveAuto.MoveDirection.FORWARD, 0.3, 2);
+                0.6, 1);
+        drivetrain.move(DriveAuto.MoveDirection.FORWARD, 0.6, 2);
     }
 
     void grabFoundation() {
@@ -86,7 +90,7 @@ public class AutonomousParent extends CVLinearOpMode {
     }
 
     void moveFoundationBack() {
-        drivetrain.move(DriveAuto.MoveDirection.BACKWARD, 0.4, 2.45);
+        drivetrain.move(DriveAuto.MoveDirection.BACKWARD, 0.6, 2.45);
     }
 
     void releaseFoundation() {
@@ -101,10 +105,11 @@ public class AutonomousParent extends CVLinearOpMode {
                 switch (startLocation) {
                     case FOUNDATION:
                         drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.RIGHT : DriveAuto.MoveDirection.LEFT,
-                                0.7, 2.25);
+                                0.7, 2.3);
+                        break;
                     case DEPOT:
                         drivetrain.move(teamColor == TeamColor.BLUE ? DriveAuto.MoveDirection.LEFT : DriveAuto.MoveDirection.RIGHT,
-                                0.7, 2);
+                                0.7, 2.3);
                 }
         }
     }

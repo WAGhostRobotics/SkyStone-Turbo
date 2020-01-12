@@ -12,8 +12,8 @@ public class FoundationGrabber {
     private Servo foundation1;
     private Servo foundation2;
 
-    private final static double RELEASE = 0.7;
-    private final static double GRAB = 0;
+    private final static double GRAB = 0.7;
+    private final static double RELEASE = 0;
 
     public void init(HardwareMap hardwareMap) {
         // Foundation
@@ -22,6 +22,8 @@ public class FoundationGrabber {
 
         foundation2 = hardwareMap.get(Servo.class, "rightFND");
         foundation2.setDirection(Servo.Direction.FORWARD);
+
+        release();
     }
 
     public void grab() {
