@@ -13,7 +13,7 @@ public class FoundationGrabber {
     private Servo foundation2;
 
     private final static double GRAB = 0.7;
-    private final static double RELEASE = 0;
+    private final static double RELEASE = 0.2;
 
     public void init(HardwareMap hardwareMap) {
         // Foundation

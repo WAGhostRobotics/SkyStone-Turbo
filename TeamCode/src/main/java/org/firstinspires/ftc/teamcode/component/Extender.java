@@ -17,7 +17,7 @@ public class Extender {
 
     private Servo claw;
 
-    private final static double EXTEND = 0;
+    private final static double EXTEND = 0.05;
     private final static double RETRACT = 0.47;
 
     private final static double OPEN = 1;
@@ -32,6 +32,7 @@ public class Extender {
 
         claw = hardwareMap.get(Servo.class, "claw");
         claw.setDirection(Servo.Direction.FORWARD);
+        openClaw();
     }
 
     public void extend() {

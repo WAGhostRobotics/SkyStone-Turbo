@@ -85,7 +85,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        // webcamName = hardwareMap.get(WebcamName.class, "bertha");
+         webcamName = hardwareMap.get(WebcamName.class, "bertha");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -95,7 +95,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+         //VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
 
@@ -232,9 +232,9 @@ public abstract class CVLinearOpMode extends LinearOpMode {
 
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
         if (CAMERA_CHOICE == BACK) {
-            phoneYRotate = -90;
-        } else {
             phoneYRotate = 90;
+        } else {
+            phoneYRotate = -90;
         }
 
         // Rotate the phone vertical about the X axis if it's in portrait mode
@@ -244,9 +244,9 @@ public abstract class CVLinearOpMode extends LinearOpMode {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 0;     // eg: Camera is ON the robot's center line
+        final float CAMERA_FORWARD_DISPLACEMENT = 3.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_LEFT_DISPLACEMENT = 9.5f * mmPerInch;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -254,7 +254,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
 
         /**  Let all the trackable listeners know where the phone is.  */
         for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+            ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(webcamName, robotFromCamera);
         }
     }
 
@@ -301,7 +301,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         targetsSkyStone.deactivate();
     }
 
-    public VectorF getTranslation() {
+    public VectorF retrieveTranslation() {
         return translation;
     }
 }

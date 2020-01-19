@@ -38,10 +38,10 @@ public class DriveAuto {
         double currentHeading = gyro.getAngle();
         switch (direction) {
             case LEFT:
-                DriveStyle.Tank(motors, power, -1, 1);
+                DriveStyle.MecanumArcade(motors, power, 0, 0, -1);
                 break;
             case RIGHT:
-                DriveStyle.Tank(motors, power, 1, -1);
+                DriveStyle.MecanumArcade(motors, power, 0, 0, 1);
                 break;
         }
         while ((direction == TurnDirection.LEFT ? currentHeading < heading : currentHeading > -heading) && !new TeleOpParent().isStopRequested()) {
@@ -53,10 +53,10 @@ public class DriveAuto {
     public void turn(TurnDirection direction, double power, double seconds) {
         switch (direction) {
             case LEFT:
-                DriveStyle.Tank(motors, power, -1, 1);
+                DriveStyle.MecanumArcade(motors, power, 0, 0, -1);
                 break;
             case RIGHT:
-                DriveStyle.Tank(motors, power, 1, -1);
+                DriveStyle.MecanumArcade(motors, power, 0, 0, 1);
                 break;
         }
         new TeleOpParent().sleep((int) (seconds * 1000));
