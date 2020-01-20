@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.teamcode.core.CVLinearOpMode;
 import org.firstinspires.ftc.teamcode.core.Kevin;
 import org.firstinspires.ftc.teamcode.library.DriveAuto;
@@ -89,27 +91,29 @@ public class AutonomousParent extends CVLinearOpMode {
 
     void moveTowardsSkystone(boolean notTheasMethod) {
         vuforiaActivate();
+        vuforiaScan2ElectricBoogaloo();
 
         final double DESIRED_X = 6; // in inches
         final double DESIRED_Y = 0; // in inches
 
-        final double MARGIN_OF_ERROR = 2; // in inches
+        final double MARGIN_OF_ERROR = 0.5; // in inches
 
         double x = lastLocation != null ? lastLocation.getTranslation().get(0) / mmPerInch : DESIRED_X;
         double y = lastLocation != null ? lastLocation.getTranslation().get(1) / mmPerInch : DESIRED_Y;
 
         // Align on y-axis
         while (Math.abs(y - DESIRED_Y) > MARGIN_OF_ERROR && opModeIsActive()) {
+            double motorPower = Range.clip(Math.abs(y - DESIRED_Y) / 6, 0.25, 1);
             if (y - DESIRED_Y > MARGIN_OF_ERROR) {
-                DriveStyle.MecanumArcade(Kevin.driveMotors, 0.1, 0, -1, 0);
+                DriveStyle.MecanumArcade(Kevin.driveMotors, motorPower, 0, -1, 0);
             } else if (DESIRED_Y - y > MARGIN_OF_ERROR) {
-                DriveStyle.MecanumArcade(Kevin.driveMotors, 0.1, 0, 1, 0);
+                DriveStyle.MecanumArcade(Kevin.driveMotors, motorPower, 0, 1, 0);
             } else {
                 DriveStyle.stop(Kevin.driveMotors);
             }
 
-            vuforiaScan();
-            y = lastLocation.getTranslation() != null ? lastLocation.getTranslation().get(1) / mmPerInch : DESIRED_Y;
+            vuforiaScan2ElectricBoogaloo();
+            y = lastLocation.getTranslation() != null ? lastLocation.getTranslation().get(1) / mmPerInch : y;
 
             telemetry.addData("Y-pos", y);
             telemetry.update();
@@ -120,16 +124,17 @@ public class AutonomousParent extends CVLinearOpMode {
 
         // Align on x-axis
         while (Math.abs(x - DESIRED_X) > MARGIN_OF_ERROR && opModeIsActive()) {
+            double motorPower = Range.clip(Math.abs(x - DESIRED_X) / 6, 0.1, 1);
             if (x - DESIRED_X > MARGIN_OF_ERROR) {
-                DriveStyle.MecanumArcade(Kevin.driveMotors, 0.1, -1, 0, 0);
+                DriveStyle.MecanumArcade(Kevin.driveMotors, motorPower, -1, 0, 0);
             } else if (DESIRED_X - x > MARGIN_OF_ERROR) {
-                DriveStyle.MecanumArcade(Kevin.driveMotors, 0.1, 1, 0, 0);
+                DriveStyle.MecanumArcade(Kevin.driveMotors, motorPower, 1, 0, 0);
             } else {
                 DriveStyle.stop(Kevin.driveMotors);
             }
 
-            vuforiaScan();
-            x = lastLocation.getTranslation() != null ? lastLocation.getTranslation().get(0) / mmPerInch : DESIRED_X;
+            vuforiaScan2ElectricBoogaloo();
+            x = lastLocation.getTranslation() != null ? lastLocation.getTranslation().get(0) / mmPerInch : x;
 
             telemetry.addData("X-pos", x);
             telemetry.update();
@@ -150,8 +155,8 @@ public class AutonomousParent extends CVLinearOpMode {
 
 
         while (isWrongPosition && !isStopRequested()) {
-            vuforiaScan();
-            double y = lastLocation.getTranslation().get(1) * mmPerInch;
+            vuforiaScan2ElectricBoogaloo();
+            double y = lastLocation.getTranslation().get(1) / mmPerInch;
             telemetry.addData("y value: ", y);
             if (lastLocation.getTranslation() != null) {
                 if (ypos < 0) {

@@ -18,14 +18,17 @@ import java.util.List;
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.ZYX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.INTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 
 public abstract class CVLinearOpMode extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
     protected static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    protected static final boolean PHONE_IS_PORTRAIT = false  ;
+    protected static final boolean PHONE_IS_PORTRAIT = false;
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -77,6 +80,11 @@ public abstract class CVLinearOpMode extends LinearOpMode {
     protected float phoneXRotate    = 0;
     protected float phoneYRotate    = 0;
     protected float phoneZRotate    = 0;
+
+    // A whole bunch of matrices that I'll deal with later
+    OpenGLMatrix vuforiaCameraFromTarget = null;
+    OpenGLMatrix vuforiaCameraFromRobot = null;
+    VuforiaTrackable visibleTarget = null;
 
     VuforiaTrackables targetsSkyStone;
     List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
@@ -230,6 +238,7 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         // pointing to the LEFT side of the Robot.
         // The two examples below assume that the camera is facing forward out the front of the robot.
 
+        /** We'll do the rotations ourselves, thank you very much.
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
         if (CAMERA_CHOICE == BACK) {
             phoneYRotate = 90;
@@ -241,25 +250,58 @@ public abstract class CVLinearOpMode extends LinearOpMode {
         if (PHONE_IS_PORTRAIT) {
             phoneXRotate = 90;
         }
+         **/
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT = 3.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-        final float CAMERA_LEFT_DISPLACEMENT = 9.5f * mmPerInch;     // eg: Camera is ON the robot's center line
+        final float CAMERA_FORWARD_DISPLACEMENT = 0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_LEFT_DISPLACEMENT = 0f * mmPerInch;     // eg: Camera is ON the robot's center line
 
+        OpenGLMatrix robotFromVuforiaCamera = OpenGLMatrix
+                .translation(0, 0, 0)
+                .multiplied(Orientation.getRotationMatrix(INTRINSIC, ZYX, DEGREES,   0, 90,0));
+
+        vuforiaCameraFromRobot = robotFromVuforiaCamera.inverted();
+        /** We'll deal with telling the trackables where the phone is ourselves.
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
-        /**  Let all the trackable listeners know where the phone is.  */
+        /**  Let all the trackable listeners know where the phone is.  ///
         for (VuforiaTrackable trackable : allTrackables) {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(webcamName, robotFromCamera);
         }
+        **/
     }
 
     public void vuforiaActivate() {
         targetsSkyStone.activate();
+    }
+
+    public void vuforiaScan2ElectricBoogaloo() {
+        for (VuforiaTrackable trackable : allTrackables) {
+            vuforiaCameraFromTarget = ((VuforiaTrackableDefaultListener) trackable.getListener()).getVuforiaCameraFromTarget();
+            if (vuforiaCameraFromTarget != null) {
+                telemetry.addData("Target Visible", trackable.getName());
+                visibleTarget = trackable;
+                break;
+            }
+        }
+        if (vuforiaCameraFromTarget == null) {
+            telemetry.addData("Visible Target", "None");
+        } else {
+            OpenGLMatrix targetFromVuforiaCamera = vuforiaCameraFromTarget.inverted();
+            OpenGLMatrix fieldFromRobot = visibleTarget.getFtcFieldFromTarget().multiplied(targetFromVuforiaCamera).multiplied(vuforiaCameraFromRobot);
+            VectorF translation = fieldFromRobot.getTranslation();
+            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+            // express the rotation of the robot in degrees.
+            Orientation rotation = Orientation.getOrientation(fieldFromRobot, EXTRINSIC, XYZ, DEGREES);
+            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+        }
+        telemetry.update();
     }
 
     public void vuforiaScan() {
